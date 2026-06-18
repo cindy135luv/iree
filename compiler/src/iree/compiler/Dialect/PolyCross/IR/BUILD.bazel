@@ -1,0 +1,73 @@
+# Copyright 2026 The IREE Authors
+#
+# Licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//build_tools/bazel:build_defs.oss.bzl", "iree_compiler_cc_library", "iree_gentbl_cc_library", "iree_td_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = ["layering_check"],
+    licenses = ["notice"],  # Apache 2.0
+)
+
+iree_td_library(
+    name = "td_files",
+    srcs = [
+        "PolyCrossBase.td",
+        "PolyCrossOps.td",
+    ],
+    deps = [
+        "@llvm-project//mlir:OpBaseTdFiles",
+    ],
+)
+
+iree_gentbl_cc_library(
+    name = "PolyCrossOpsGen",
+    tbl_outs = [
+        (
+            ["--gen-op-decls"],
+            "PolyCrossOps.h.inc",
+        ),
+        (
+            ["--gen-op-defs"],
+            "PolyCrossOps.cpp.inc",
+        ),
+        (
+            [
+                "--dialect=polycross",
+                "--gen-dialect-decls",
+            ],
+            "PolyCrossDialect.h.inc",
+        ),
+        (
+            [
+                "--dialect=polycross",
+                "--gen-dialect-defs",
+            ],
+            "PolyCrossDialect.cpp.inc",
+        ),
+    ],
+    tblgen = "@llvm-project//mlir:mlir-tblgen",
+    td_file = "PolyCrossOps.td",
+    deps = [":td_files"],
+)
+
+iree_compiler_cc_library(
+    name = "IR",
+    srcs = [
+        "PolyCrossDialect.cpp",
+        "PolyCrossOps.cpp",
+    ],
+    hdrs = [
+        "PolyCrossDialect.h",
+        "PolyCrossOps.h",
+    ],
+    deps = [
+        ":PolyCrossOpsGen",
+        "@llvm-project//llvm:Support",
+        "@llvm-project//mlir:IR",
+        "@llvm-project//mlir:Support",
+    ],
+)
