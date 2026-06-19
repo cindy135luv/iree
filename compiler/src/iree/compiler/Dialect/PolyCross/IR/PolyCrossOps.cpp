@@ -6,6 +6,8 @@
 
 #include "iree/compiler/Dialect/PolyCross/IR/PolyCrossOps.h"
 
+#include "mlir/IR/Builders.h"
+
 // clang-format off
 #define GET_OP_CLASSES
 #include "iree/compiler/Dialect/PolyCross/IR/PolyCrossOps.cpp.inc"

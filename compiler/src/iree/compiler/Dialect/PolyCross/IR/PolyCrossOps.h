@@ -8,6 +8,7 @@
 #define IREE_COMPILER_DIALECT_POLYCROSS_IR_POLYCROSSOPS_H_
 
 #include "iree/compiler/Dialect/PolyCross/IR/PolyCrossDialect.h"
+#include "mlir/Bytecode/BytecodeOpInterface.h"
 #include "mlir/IR/Attributes.h"
 #include "mlir/IR/BuiltinTypes.h"
 #include "mlir/IR/Dialect.h"
